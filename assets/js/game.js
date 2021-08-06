@@ -31,34 +31,31 @@ var fightOrSkip = function() {
 };
 
 var fight = function(enemy) {
-
-    //keep track of who goes first
+    // keep track of who goes first
     var isPlayerTurn = true;
 
-    //randomly change turn order
+    // randomly change turn order
     if (Math.random() > 0.5) {
         isPlayerTurn = false;
-    }
+        }
 
     while (playerInfo.health > 0 && enemy.health > 0) {
-        if (isPlayerTurn) {
+    if (isPlayerTurn) {
         // ask player if they'd like to fight or skip using fightOrSkip function
-            if (fightOrSkip()) {
-            //if true, leave fight by breaking loop
-            break;
-    }
+        if (fightOrSkip()) {
+        
+        // if true, leave fight by breaking loop
+        break;
+        }
 
-    var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
-    
-    //remove enemy's health by subtracting the amount we set in the damage variable
+        var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
 
-
-        // if player picks "skip" confirm and then stop the loop
+        // remove enemy's health by subtracting the amount we set in the damage variable
         enemy.health = Math.max(0, enemy.health - damage);
         console.log(
             playerInfo.name +
             " attacked " +
-                enemy.name +
+            enemy.name +
             ". " +
             enemy.name +
             " now has " +
@@ -79,6 +76,7 @@ var fight = function(enemy) {
         } else {
         window.alert(enemy.name + " still has " + enemy.health + " health left.");
         }
+
         // player gets attacked first
         } else {
         var damage = randomNumber(enemy.attack - 3, enemy.attack);
@@ -103,11 +101,11 @@ var fight = function(enemy) {
         break;
 
         } else {
-        window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
+            window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
         }
     }
-    // switch turn order for next round
-    isPlayerTurn = !isPlayerTurn;
+        // switch turn order for next round
+        isPlayerTurn = !isPlayerTurn;
     }
 };
 
@@ -149,23 +147,33 @@ var startGame = function() {
 
 //function to end the entire game
 var endGame = function() {
-    //if player is still alive, player wins!
-    if (playerInfo.health > 0) {
-        window.alert("Great job, you've survived the game! You now have a score of " + playerInfo.money + ".");
-        }
-        else {
-            window.alert("You've lost your robot in battle.");
-        }
-        //ask player if they'd like to play again
-        var playAgainConfirm = window.confirm("Would you like to play again?");
+    window.alert("The game has now ended. Let's see how you did!");
 
-        if (playAgainConfirm) {
-            //restart the game
-            startGame();
+    // check localStorage for high score, if it's not there, use 0
+    var highScore = localStorage.getItem("highscore");
+        if (highScore === null) {
+            highScore = 0;
         }
+    // if player has more money than the high score, player has new high score!
+    if (playerInfo.money > highScore) {
+        localStorage.setItem("highscore", playerInfo.money);
+        localStorage.setItem("name", playerInfo.name);
+
+        alert(playerInfo.name + " now has the high score of " + playerInfo.money + "!");
+        } 
         else {
-            window.alert("Thank you for playing Robot Gladiators! Come back soon!");
+        alert(playerInfo.name + " did not beat the high score of " + highScore + ". Maybe next time!");
         }
+
+    // ask player if they'd like to play again
+    var playAgainConfirm = window.confirm("Would you like to play again?");
+
+    if (playAgainConfirm) {
+        startGame();
+    } 
+    else {
+        window.alert("Thank you for playing Robot Gladiators! Come back soon!");
+    }
 };
 
 var shop = function() {
